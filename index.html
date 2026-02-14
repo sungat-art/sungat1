@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тортай мінген Ақбозат - Виртуалды тапсырмалар</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #0f172a;
+            /* Фонды анық әрі қанық ету үшін overlay қосылды */
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), 
+                              url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=1920');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .ethno-card {
+            background: rgba(255, 255, 255, 0.98); /* Ақ түс қанық болды */
+            border: 2px solid #d4af37; /* Алтын жиек анықталды */
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Қазақи өрнек стиліндегі жоғарғы жолақ */
+        .ethno-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: repeating-linear-gradient(45deg, #d4af37, #d4af37 10px, #b8860b 10px, #b8860b 20px);
+        }
+
+        .sidebar-item {
+            transition: all 0.3s ease;
+            margin-bottom: 0.75rem;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: #cbd5e1;
+        }
+
+        .sidebar-item.active {
+            background-color: #d4af37;
+            color: #0f172a;
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            transform: scale(1.05);
+        }
+
+        .sidebar-item:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeInScale 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1, h2, .accent-font {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-glass {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(15px);
+            border-right: 2px solid #d4af37;
+        }
+
+        /* Мәтін жазатын жерлерді контрастты ету */
+        textarea, input[type="text"] {
+            background: #f8fafc !important;
+            border: 2px solid #e2e8f0 !important;
+            color: #1e293b !important;
+            font-weight: 600;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: #d4af37 !important;
+            background: #fff !important;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100">
+
+    <div class="flex flex-col md:flex-row min-h-screen relative z-10">
+        
+        <!-- Sidebar -->
+        <aside class="w-full md:w-80 sidebar-glass flex flex-col p-8 space-y-10 shrink-0 shadow-2xl">
+            <div class="text-center md:text-left">
+                <div class="inline-block p-4 bg-white rounded-3xl mb-6 shadow-2xl border-2 border-amber-400">
+                    <span class="text-5xl block transform -scale-x-100">🐎</span>
+                </div>
+                <h1 class="text-3xl font-black text-white leading-tight">ТОРТАЙ МІНГЕН<br><span class="text-amber-400 italic italic">АҚБОЗАТ</span></h1>
+                <div class="mt-4 flex items-center justify-center md:justify-start space-x-2">
+                    <span class="h-1 w-10 bg-amber-500 rounded-full"></span>
+                    <p class="text-sm text-amber-200 uppercase tracking-widest font-bold">Оралхан Бөкей</p>
+                </div>
+            </div>
+
+            <nav class="space-y-1 flex-grow">
+                <div onclick="showSection('questions')" id="btn-questions" class="sidebar-item active p-4 flex items-center space-x-4 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center font-black">01</div>
+                    <span class="font-bold tracking-wide">Сұрақтар алаңы</span>
+                </div>
+                <div onclick="showSection('diamanta')" id="btn-diamanta" class="sidebar-item p-4 flex items-center space-x-4 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center font-black">02</div>
+                    <span class="font-bold tracking-wide">Диаманта</span>
+                </div>
+                <div onclick="showSection('guess')" id="btn-guess" class="sidebar-item p-4 flex items-center space-x-4 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center font-black">03</div>
+                    <span class="font-bold tracking-wide">Ойлап тап</span>
+                </div>
+                <div onclick="showSection('deal')" id="btn-deal" class="sidebar-item p-4 flex items-center space-x-4 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center font-black">04</div>
+                    <span class="font-bold tracking-wide">DEAL әдісі</span>
+                </div>
+                <div onclick="showSection('insert')" id="btn-insert" class="sidebar-item p-4 flex items-center space-x-4 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center font-black">05</div>
+                    <span class="font-bold tracking-wide">INSERT кестесі</span>
+                </div>
+            </nav>
+
+            <div class="pt-6">
+                <button onclick="window.print()" class="w-full bg-amber-500 text-slate-900 py-4 rounded-2xl font-black hover:bg-white transition-all shadow-[0_0_30px_rgba(212,175,55,0.3)] flex items-center justify-center space-x-3">
+                    <span class="text-xl">💾</span>
+                    <span>НӘТИЖЕНІ САҚТАУ</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow p-6 md:p-12 overflow-y-auto">
+            
+            <!-- 1. Сұрақтар алаңы -->
+            <section id="questions" class="content-section active">
+                <div class="max-w-5xl">
+                    <div class="flex items-center space-x-6 mb-12">
+                        <div class="h-16 w-2 bg-amber-500 rounded-full shadow-[0_0_15px_#f59e0b]"></div>
+                        <h2 class="text-5xl font-black text-white drop-shadow-lg">Сұрақтар алаңы</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="ethno-card p-10">
+                            <div class="bg-blue-700 text-white w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-xl text-xl font-bold">?</div>
+                            <label class="block font-black text-slate-900 text-2xl mb-4">Жіңішке сұрақ</label>
+                            <p class="text-slate-700 mb-6 text-lg font-medium leading-relaxed">Тортайдың балалық шағындағы ең басты ермегі не еді?</p>
+                            <textarea class="w-full p-6 rounded-2xl outline-none h-40 resize-none shadow-inner" placeholder="Жауапты осы жерге толықтай жазыңыз..."></textarea>
+                        </div>
+                        
+                        <div class="ethno-card p-10">
+                            <div class="bg-red-600 text-white w-12 h-12 rounded-2xl flex items-center justify-center mb-6 shadow-xl text-xl font-bold">!</div>
+                            <label class="block font-black text-slate-900 text-2xl mb-4">Жуан сұрақ</label>
+                            <p class="text-slate-700 mb-6 text-lg font-medium leading-relaxed">Неліктен Тортайдың арманы Ақбозат секілді сағымға айналды?</p>
+                            <textarea class="w-full p-6 rounded-2xl outline-none h-40 resize-none shadow-inner" placeholder="Өз сыни көзқарасыңызды дәлелдеңіз..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Диаманта -->
+            <section id="diamanta" class="content-section">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-12">
+                        <h2 class="text-5xl font-black text-white mb-4 drop-shadow-xl">Диаманта</h2>
+                        <div class="bg-amber-500 text-slate-900 inline-block px-6 py-2 rounded-full font-black uppercase tracking-widest text-sm">Арман мен Шындық</div>
+                    </div>
+                    
+                    <div class="ethno-card p-12 space-y-5">
+                        <input type="text" class="w-full p-5 border-b-4 border-slate-200 outline-none text-center text-2xl font-black placeholder:text-slate-300" placeholder="1. Тортай (Зат есім)">
+                        <input type="text" class="w-full p-4 border-b-2 border-slate-100 outline-none text-center text-xl italic placeholder:text-slate-300" placeholder="2. Оның мінезі (екі сын есім)">
+                        <input type="text" class="w-full p-4 border-b-2 border-slate-100 outline-none text-center text-lg placeholder:text-slate-300" placeholder="3. Оның әрекеті (үш етістік)">
+                        <div class="py-4">
+                            <input type="text" class="w-full p-6 border-4 border-amber-500 rounded-3xl outline-none text-center font-black text-2xl text-amber-700 bg-amber-50 shadow-2xl" placeholder="4. Ортақ төрт сөз">
+                        </div>
+                        <input type="text" class="w-full p-4 border-b-2 border-slate-100 outline-none text-center text-lg placeholder:text-slate-300" placeholder="5. Автордың әрекеті (үш етістік)">
+                        <input type="text" class="w-full p-4 border-b-2 border-slate-100 outline-none text-center text-xl italic placeholder:text-slate-300" placeholder="6. Ораштың сипаты (екі сын есім)">
+                        <input type="text" class="w-full p-5 border-b-4 border-slate-200 outline-none text-center text-2xl font-black placeholder:text-slate-300" placeholder="7. Автор (Антоним немесе тұлға)">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Ойлап тап -->
+            <section id="guess" class="content-section">
+                <div class="max-w-4xl">
+                    <h2 class="text-5xl font-black text-white mb-12 drop-shadow-xl">Ойлап тап</h2>
+                    
+                    <div class="space-y-10">
+                        <div class="ethno-card p-2 flex flex-col md:flex-row items-stretch shadow-2xl">
+                            <div class="bg-slate-900 text-amber-400 p-10 md:w-1/3 rounded-2xl flex flex-col items-center justify-center text-center">
+                                <span class="text-7xl mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">📖</span>
+                                <span class="text-2xl font-black italic">Кітап + Арман = ?</span>
+                            </div>
+                            <div class="p-10 flex-grow w-full">
+                                <p class="text-sm font-black text-amber-600 uppercase mb-4 tracking-widest">Теңдеудің шешімі:</p>
+                                <textarea class="w-full p-6 rounded-2xl outline-none h-32 resize-none shadow-inner text-lg" placeholder="Бұл формуланың шығармадағы мәнін түсіндіріңіз..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="ethno-card p-2 flex flex-col md:flex-row items-stretch shadow-2xl">
+                            <div class="bg-slate-900 text-amber-400 p-10 md:w-1/3 rounded-2xl flex flex-col items-center justify-center text-center">
+                                <span class="text-7xl mb-6 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">🏔️</span>
+                                <span class="text-2xl font-black italic">Ақбозат + Сағым = ?</span>
+                            </div>
+                            <div class="p-10 flex-grow w-full">
+                                <p class="text-sm font-black text-amber-600 uppercase mb-4 tracking-widest">Философиялық түйін:</p>
+                                <textarea class="w-full p-6 rounded-2xl outline-none h-32 resize-none shadow-inner text-lg" placeholder="Ақбозат пен сағымның байланысын сипаттаңыз..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. DEAL -->
+            <section id="deal" class="content-section">
+                <div class="max-w-5xl">
+                    <h2 class="text-5xl font-black text-white mb-12 drop-shadow-xl">DEAL талдауы</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="ethno-card p-10 group hover:bg-slate-900 transition-all duration-300">
+                            <h3 class="text-3xl font-black mb-4 flex items-center text-slate-900 group-hover:text-amber-400"><span class="w-4 h-4 bg-amber-500 rounded-full mr-4 shadow-lg"></span>Describe</h3>
+                            <p class="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.2em]">Оқиғаны баяндау</p>
+                            <textarea class="w-full p-5 rounded-2xl h-44 outline-none shadow-inner"></textarea>
+                        </div>
+                        <div class="ethno-card p-10 group hover:bg-slate-900 transition-all duration-300">
+                            <h3 class="text-3xl font-black mb-4 flex items-center text-slate-900 group-hover:text-amber-400"><span class="w-4 h-4 bg-amber-500 rounded-full mr-4 shadow-lg"></span>Explain</h3>
+                            <p class="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.2em]">Себептерін түсіндіру</p>
+                            <textarea class="w-full p-5 rounded-2xl h-44 outline-none shadow-inner"></textarea>
+                        </div>
+                        <div class="ethno-card p-10 group hover:bg-slate-900 transition-all duration-300">
+                            <h3 class="text-3xl font-black mb-4 flex items-center text-slate-900 group-hover:text-amber-400"><span class="w-4 h-4 bg-amber-500 rounded-full mr-4 shadow-lg"></span>Analyse</h3>
+                            <p class="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.2em]">Терең талдау жасау</p>
+                            <textarea class="w-full p-5 rounded-2xl h-44 outline-none shadow-inner"></textarea>
+                        </div>
+                        <div class="ethno-card p-10 group hover:bg-slate-900 transition-all duration-300">
+                            <h3 class="text-3xl font-black mb-4 flex items-center text-slate-900 group-hover:text-amber-400"><span class="w-4 h-4 bg-amber-500 rounded-full mr-4 shadow-lg"></span>Links</h3>
+                            <p class="text-xs font-black text-slate-400 mb-6 uppercase tracking-[0.2em]">Өмірмен байланыстыру</p>
+                            <textarea class="w-full p-5 rounded-2xl h-44 outline-none shadow-inner"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. INSERT -->
+            <section id="insert" class="content-section">
+                <div class="max-w-6xl">
+                    <h2 class="text-5xl font-black text-white mb-12 drop-shadow-xl">INSERT кестесі</h2>
+                    <div class="ethno-card bg-white shadow-[0_30px_60px_rgba(0,0,0,0.5)] border-4 border-slate-900">
+                        <div class="grid grid-cols-4 bg-slate-900 text-amber-400 font-black text-center text-xl uppercase tracking-widest py-8">
+                            <div class="border-r-2 border-slate-700">V</div>
+                            <div class="border-r-2 border-slate-700">+</div>
+                            <div class="border-r-2 border-slate-700">-</div>
+                            <div>?</div>
+                        </div>
+                        <div class="grid grid-cols-4 h-[600px]">
+                            <textarea class="p-8 border-r-2 border-slate-100 outline-none resize-none bg-white text-xl font-semibold focus:bg-amber-50" placeholder="Білемін..."></textarea>
+                            <textarea class="p-8 border-r-2 border-slate-100 outline-none resize-none bg-white text-xl font-semibold focus:bg-amber-50" placeholder="Жаңалық..."></textarea>
+                            <textarea class="p-8 border-r-2 border-slate-100 outline-none resize-none bg-white text-xl font-semibold focus:bg-amber-50" placeholder="Келіспеймін..."></textarea>
+                            <textarea class="p-8 outline-none resize-none bg-white text-xl font-semibold focus:bg-amber-50" placeholder="Сұрақ..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('btn-' + sectionId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
